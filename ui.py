@@ -91,10 +91,7 @@ class TextBox:
         
         if event.type == pygame.KEYDOWN:
             if self.active:
-                if event.key == pygame.K_RETURN:
-                    print(self.text)
-                    self.text = ""
-                elif event.key == pygame.K_BACKSPACE:
+                if event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
                 else:
                     self.text += event.unicode
@@ -161,9 +158,16 @@ class CourseAddApp():
             box.renderText()
             box.draw(self.surface)
         
+        for lecButton in self.lecButtons:
+            lecButton.color = pygame.Color("red")
+        for lsButton in self.lsButtons:
+            lsButton.color = pygame.Color("red")
+
         self.ls = False
         self.add = False
         self.done = False
+        self.day = ''
+        self.lsButton.active = False
 
     def dateValidation(self, date):
         if ":" not in date:
@@ -245,8 +249,6 @@ class CourseAddApp():
                         "ls day": False}                
 
             self.dataList.append(data)
-            print(self.dataList)
-
             self.resetData()
 
     def runAddCourses(self):
@@ -409,10 +411,20 @@ class ScheduleApp():
         self.closeClicked = False
 
     def runSchedules(self):
-    
         while not self.closeClicked:
             self.handleEvents()
-            self.draw()
+
+            if self.schedule == -1:
+                self.drawNoSchedule()
+            else:
+                self.draw()
+
+    def drawNoSchedule(self):
+        self.surface.fill(pygame.Color("white"))
+        noText = "No schedules can be made from the current courses, try adding fewer courses."
+        noTextImage = pygame.font.SysFont("", 40).render(noText, True, pygame.Color("red"))
+        self.surface.blit(noTextImage, (50, 250))
+        pygame.display.update()
 
     def draw(self):
         self.surface.fill(pygame.Color("white"))
@@ -525,42 +537,8 @@ def uiShowSchedules(schedules):
     pygame.display.set_mode([1200, 800])
     pygame.display.set_caption("SlayTracks")
     surface = pygame.display.get_surface()
-    
     schedApp = ScheduleApp(schedules, surface)
-    
     schedApp.runSchedules()
     pygame.quit()
 
     return
-
-testSchedule1 = [
-                    
-                    [{"course": "CMPUT 301", "section": "B1", "location": "EDU", "start": "9:00", "end": "10:00"}],
-                    [{"course": "CMPUT 379", "section": "D5", "location": "ETLC", "start": "12:30", "end": "2:00"}], 
-                    [{"course": "CMPUT 301", "section": "B1", "location": "EDU", "start": "9:00", "end": "10:00"}], 
-                    [{"course": "CMPUT 379", "section": "D5", "location": "ETLC", "start": "12:30", "end": "2:00"}], 
-                    [{"course": "CMPUT 301", "section": "B1", "location": "EDU", "start": "9:00", "end": "10:00"}]
-                    
-                ]
-
-testSchedule3 = [
-                    
-                    [{"course": "CMPUT 301", "section": "D5", "location": "EDU", "start": "9:00", "end": "10:00"}],
-                    [], 
-                    [{"course": "CMPUT 301", "section": "D5", "location": "EDU", "start": "9:00", "end": "10:00"}], 
-                    [], 
-                    [{"course": "CMPUT 301", "section": "D5", "location": "EDU", "start": "9:00", "end": "10:00"}]
-                    
-                ]
-
-testSchedule4 = [
-                    
-                    [{"course": "CMPUT 301", "section": "B1", "location": "EDU", "start": "9:00", "end": "10:00"}, {"course": "CMPUT 325", "section": "A2", "location": "TORY", "start": "12:00", "end": "13:00"}, {"course": "CMPUT 301", "section": "LAB D07", "location": "EDU", "start": "14:00", "end": "17:00"}],
-                    [{"course": "CMPUT 379", "section": "D5", "location": "ETLC", "start": "12:30", "end": "2:00"}], 
-                    [{"course": "CMPUT 301", "section": "B1", "location": "EDU", "start": "9:00", "end": "10:00"}, {"course": "CMPUT 325", "section": "A2", "location": "TORY", "start": "12:00", "end": "13:00"}], 
-                    [{"course": "CMPUT 379", "section": "D5", "location": "ETLC", "start": "12:30", "end": "2:00"}], 
-                    [{"course": "CMPUT 301", "section": "B1", "location": "EDU", "start": "9:00", "end": "10:00"}, {"course": "CMPUT 325", "section": "A2", "location": "TORY", "start": "12:00", "end": "13:00"}]
-                    
-                ]
-
-#uiShowSchedules(testSchedule4)
