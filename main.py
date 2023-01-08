@@ -74,10 +74,14 @@ def estf(machines, course): # ESTF takes a list of all machines (and the machine
                 machines[4].courses.append(course) # Friday
             elif len(machines[0].courses) != 0:
                 # if there are courses in the schedule 
-                if (machines[0].courses[len(machines.courses) - 1]["end"] < course["start"]): # check latest course scheduled on Monday, if it's endTime is < the course to be scheduled's startTime, schedule this course
-                    machines[0].courses.append(course) # Monday
-                    machines[2].courses.append(course) # Wednesday
-                    machines[4].courses.append(course) # Friday
+
+                try:
+                    if (machines[0].courses[len(machines.courses) - 1]["end"] < course["start"]): # check latest course scheduled on Monday, if it's endTime is < the course to be scheduled's startTime, schedule this course
+                        machines[0].courses.append(course) # Monday
+                        machines[2].courses.append(course) # Wednesday
+                        machines[4].courses.append(course) # Friday
+                except:
+                    return -1
             
             # if course["course"] in duplicates:
             #     dup += 1
@@ -94,9 +98,12 @@ def estf(machines, course): # ESTF takes a list of all machines (and the machine
                 machines[3].courses.append(course) # Thursday
             elif len(machines[1].courses) != 0:
                 # if there are courses in the schedule 
-                if (machines[1].courses[len(machines.courses) - 1]["end"] < course["start"]): 
-                    machines[1].courses.append(course) # Tuesday
-                    machines[3].courses.append(course) # Thursday
+                try:
+                    if (machines[1].courses[len(machines.courses) - 1]["end"] < course["start"]): 
+                        machines[1].courses.append(course) # Tuesday
+                        machines[3].courses.append(course) # Thursday
+                except:
+                    return -1
             # if course["course"] in duplicates:
             #     dup += 1
             #     duplicates.append(course["course"])
@@ -148,13 +155,16 @@ def main():
     machine5 = Machine(5)
     machines = [machine1,machine2,machine3,machine4,machine5]
     for i in choices:
-        estf(machines, i)
+        res = estf(machines, i)
+        if res == -1:
+            break
 
     pygame.quit()
 
-    print([machine1.courses, machine2.courses, machine3.courses, machine4.courses, machine5.courses])
-
-    uiShowSchedules([machine1.courses, machine2.courses, machine3.courses, machine4.courses, machine5.courses])
+    if res == -1:
+        uiShowSchedules(-1)
+    else:
+        uiShowSchedules([machine1.courses, machine2.courses, machine3.courses, machine4.courses, machine5.courses])
     
     return
 
