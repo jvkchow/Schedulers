@@ -2,9 +2,6 @@ from ui import uiAddCourse, uiShowSchedules
 import pygame
 from datetime import datetime
 
-# duplicates = []
-# nondup = []
-# dup = 0
 class Course():
     
     def __init__(self, name, startTime, endTime, MWF, section, location, TR):
@@ -19,7 +16,6 @@ class Course():
 
     def machineFit(self, machines):
         # iterate through all the machines 
-        # self.endTime
         return
 
 # ESTF
@@ -74,7 +70,6 @@ def estf(machines, course): # ESTF takes a list of all machines (and the machine
                 machines[4].courses.append(course) # Friday
             elif len(machines[0].courses) != 0:
                 # if there are courses in the schedule 
-
                 try:
                     if (machines[0].courses[len(machines.courses) - 1]["end"] < course["start"]): # check latest course scheduled on Monday, if it's endTime is < the course to be scheduled's startTime, schedule this course
                         machines[0].courses.append(course) # Monday
@@ -82,14 +77,6 @@ def estf(machines, course): # ESTF takes a list of all machines (and the machine
                         machines[4].courses.append(course) # Friday
                 except:
                     return -1
-            
-            # if course["course"] in duplicates:
-            #     dup += 1
-            #     duplicates.append(course["course"])
-            #     nondup.remove(course["course"])
-            # else:
-            #     nondup.append(course["course"])
-
                     
         # repeat the same for Tuesday Thursday
         elif (course["tr"]) == True:
@@ -104,23 +91,7 @@ def estf(machines, course): # ESTF takes a list of all machines (and the machine
                         machines[3].courses.append(course) # Thursday
                 except:
                     return -1
-            # if course["course"] in duplicates:
-            #     dup += 1
-            #     duplicates.append(course["course"])
-            #     nondup.remove(course["course"])
-            # else:
-            #     nondup.append(course["course"])
-
-# def mult_estf():
-#     for i in range(0, dup):
-#         for mach in machines:
-#             mach.courses.clear()
-#         for dups in duplicates:
-#             estf(machines, dups)
-#         for nondups in nondup:
-#             estf(machines, nondups)
     
-
 def userInput():
     
     courseList = []
